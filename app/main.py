@@ -21,7 +21,12 @@ def get_db():
     db = SessionLocal()
     try: yield db
     finally: db.close()
+from fastapi import FastAPI
+app = FastAPI()
 
+@app.get("/healthz")
+def healthz():
+    return {"ok": True}
 def log_action(db, user, action, detail):
     db.add(models.AuditLog(user=user, action=action, detail=detail)); db.commit()
 
