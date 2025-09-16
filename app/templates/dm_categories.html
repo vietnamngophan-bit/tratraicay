@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Quản lý danh mục</h2>
+<div class="card">
+  <form method="post" action="/dm/categories/add" class="grid3">
+    <div><label>Mã</label><input name="code" required></div>
+    <div><label>Tên</label><input name="name" required></div>
+    <div class="colspan3"><button class="btn">Thêm</button></div>
+  </form>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Mã</th><th>Tên</th></tr></thead>
+    {% for c in rows %}<tr><td>{{c.code}}</td><td>{{c.name}}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

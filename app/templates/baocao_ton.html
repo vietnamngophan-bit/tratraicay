@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Tồn kho hiện tại – {{ store.name }}</h2>
+<table>
+  <thead><tr><th>Mã</th><th>Tên SP</th><th>ĐVT</th><th>SL</th><th>Giá BQ</th><th>Số cốc</th><th>Thành tiền</th></tr></thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td><a href="/kho/lichsu/{{r.code}}">{{ r.code }}</a></td>
+      <td>{{ r.name }}</td>
+      <td>{{ r.uom }}</td>
+      <td>{{ "{:,.3f}".format(r.qty or 0) }}</td>
+      <td>{{ "{:,.0f}".format(r.avg or 0) }}</td>
+      <td>{{ "{:,.0f}".format(r.cups or 0) }}</td>
+      <td>{{ "{:,.0f}".format(r.value or 0) }}</td>
+    </tr>
+    {% endfor %}
+    <tr class="total"><td colspan="6" class="right">Tổng giá trị:</td><td>{{ "{:,.0f}".format(total) }}</td></tr>
+  </tbody>
+</table>
+{% endblock %}

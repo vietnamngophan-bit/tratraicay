@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Sản xuất – {{ store.name }}</h2>
+<div class="grid2">
+  <div class="card">
+    <h3>Khởi tạo</h3>
+    <form method="post" action="/sanxuat/start" onsubmit="return beforeSubmit()">
+      <label>Công thức</label>
+      <select id="formula_code" name="formula_code" onchange="updateInputs()">
+        {% for f in formulas %}<option value="{{ f.code }}" data-kind="{{ f.kind }}" data-fruits="{{ f.fruits_csv }}" data-cups="{{ f.cups_per_kg }}" data-u="{{ f.output_product_code }}">{{ f.code }} – {{ f.name }} ({{ f.kind }})</option>{% endfor %}
+      </select>
+      <div id="inputs"></div>
+      <label>KG sau sơ chế / đầu vào</label>
+      <input id="kg_sau" type="number" step="0.001" name="kg_sau" value="10">
+      <button type="button" class="btn" onclick="preview()">Preview phụ gia</button>
+      <pre id="addons"></pre>
+      <label>Ghi chú</label><input name="note">
+      <input type="hidden" id="fruits_raw" name="fruits_raw">
+      <button class="btn">Thực hiện</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Hoàn thành MỨT (WIP → TP)</h3>
+    <form method="post" action="/sanxuat/complete">
+      <label>Chọn lô WIP</label>
+      <select name="batch_id" id="batch">
+        {% for w in wips %}<option value="{{ w.batch_id }}">{{ w.batch_id }} · {{ w.formula_code }} · kg_sau={{ w.kg_sau }}</option>{% endfor %}
+      </select>
+      <label>KG thành phẩm</label>
+      <input name="kg_tp" type="number" step="0.001" value="8">
+      <button class="btn">Hoàn thành</button>
+    </form>
+  </div>
+</div>
+<script>
+function updateInputs(){
+  const sel = document.getElementById('formula_code');
+  const kind = sel.options[sel.selectedIndex].dataset.kind;
+  const fruitsCsv = sel.options[sel.selectedIndex].dataset.fruits || "";
+  const c = document.getElementById('inputs');
+  if(kind === 'MUT_COT'){
+    c.innerHTML = '<h4>CỐT đầu vào</h4><label>Chọn mã CỐT</label><input name="raw_code" placeholder="VD: COT_ND"><label>KG</label><input name="raw_qty" type="number" step="0.001" value="5">';
+  }else{
+    const list = (fruitsCsv||"").split(',').map(x=>x.trim()).filter(Boolean);
+    c.innerHTML = '<h4>Trái cây thô</h4>' + list.map(code=>`
+      <label>${code} – KG</label><input type="number" step="0.001" name="raw_${code}" value="2">
+    `).join('');
+  }
+}
+function preview(){
+  const form = new FormData();
+  form.append("formula_code", document.getElementById('formula_code').value);
+  form.append("kg_sau", document.getElementById('kg_sau').value);
+  fetch('/sanxuat/preview', {method:'POST', body: form}).then(r=>r.text()).then(t=>{
+    document.getElementById('addons').textContent = t;
+  });
+}
+function beforeSubmit(){
+  const sel = document.getElementById('formula_code');
+  const kind = sel.options[sel.selectedIndex].dataset.kind;
+  let obj = {};
+  if(kind === 'MUT_COT'){
+    const code = document.querySelector('[name="raw_code"]').value;
+    const qty = parseFloat(document.querySelector('[name="raw_qty"]').value || '0');
+    if(code && qty>0){ obj[code] = qty; }
+  }else{
+    const fruitsCsv = sel.options[sel.selectedIndex].dataset.fruits || "";
+    const list = (fruitsCsv||"").split(',').map(x=>x.trim()).filter(Boolean);
+    list.forEach(code => {
+      const el = document.querySelector(`[name="raw_${code}"]`);
+      if (el && el.value){ obj[code] = parseFloat(el.value); }
+    });
+  }
+  document.getElementById('fruits_raw').value = JSON.stringify(obj);
+  return true;
+}
+window.addEventListener('DOMContentLoaded', updateInputs);
+</script>
+{% endblock %}

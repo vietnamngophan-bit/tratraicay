@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Quản lý sản phẩm</h2>
+<div class="card">
+  <form method="post" action="/dm/products/add" class="grid4">
+    <div><label>Mã</label><input name="code" required></div>
+    <div><label>Tên</label><input name="name" required></div>
+    <div><label>ĐVT</label><input name="uom" value="kg"></div>
+    <div><label>Danh mục</label>
+      <select name="category_code">{% for c in cats %}<option value="{{c.code}}">{{c.name}}</option>{% endfor %}</select>
+    </div>
+    <div class="colspan4"><button class="btn">Thêm</button></div>
+  </form>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Mã</th><th>Tên</th><th>ĐVT</th><th>Danh mục</th></tr></thead>
+    {% for p in rows %}<tr><td>{{p.code}}</td><td>{{p.name}}</td><td>{{p.uom}}</td><td>{{p.category_code}}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

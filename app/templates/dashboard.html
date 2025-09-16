@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Dashboard</h2>
+<div class="grid2">
+  <div class="card kpi"><div class="kpi-title">Giá trị tồn kho (tổng)</div><div class="kpi-value">{{ "{:,.0f}".format(total_onhand) }} VND</div></div>
+  <div class="card kpi"><div class="kpi-title">Doanh thu hôm nay (tổng)</div><div class="kpi-value">{{ "{:,.0f}".format(rev_today) }} VND</div></div>
+</div>
+{% endblock %}

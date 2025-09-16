@@ -1,0 +1,79 @@
+:root {
+  --bg:#0f172a;        /* slate-900 */
+  --card:#0b1220;      /* deep card */
+  --line:#1e293b;      /* divider */
+  --text:#e2e8f0;      /* slate-200 */
+  --muted:#94a3b8;     /* slate-400 */
+  --primary:#22c55e;   /* green-500 */
+  --danger:#ef4444;    /* red-500 */
+  --link:#a5b4fc;      /* indigo-300 */
+}
+
+* { box-sizing: border-box; }
+html, body { height:100%; }
+body {
+  margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg); color: var(--text);
+}
+
+/* Top bar */
+.topbar {
+  position: sticky; top:0; z-index: 10;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--line);
+}
+
+/* Layout */
+.container { display:flex; gap:16px; padding:16px; }
+.sidebar {
+  width:260px; background: var(--card); border:1px solid var(--line);
+  border-radius: 14px; padding: 12px; display:flex; flex-direction:column; gap:6px;
+}
+.sidebar a {
+  padding: 10px 12px; border-radius: 10px; color: var(--text); text-decoration: none;
+}
+.sidebar a:hover { background: #22c55e33; color:#fff; }
+
+.content { flex:1; min-width:0; }
+
+/* Cards */
+.card {
+  background: var(--card); border:1px solid var(--line);
+  border-radius: 14px; padding: 16px; margin-bottom: 16px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset;
+}
+.card h2, .card h3 { margin-top:0; }
+
+/* Form elements */
+input, select, textarea {
+  width:100%; padding:10px 12px; margin:6px 0 10px;
+  border:1px solid #334155; border-radius: 10px; background:#0a1220; color: var(--text);
+}
+textarea { min-height: 90px; resize: vertical; }
+
+.btn {
+  display:inline-block; cursor:pointer; border:none; border-radius: 10px;
+  padding:10px 14px; background: var(--primary); color:#0a0a0a; font-weight:600;
+}
+.btn + .btn { margin-left: 6px; }
+.btn.danger { background: var(--danger); color: #fff; }
+a.btn { text-decoration: none; text-align:center; }
+
+/* Tables */
+table { width:100%; border-collapse: collapse; }
+th, td { padding: 10px; border-bottom: 1px solid #233044; text-align:left; }
+th { color:#c7d2fe; font-weight: 600; }
+
+/* Links */
+a { color: var(--link); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .container { padding: 12px; }
+  .sidebar { width: 220px; }
+}
+@media (max-width: 860px) {
+  .sidebar { display:none; }
+  .container { padding: 10px; }
+  .card { padding: 14px; }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title or "Quản lý cửa hàng" }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div><b>{{ store.name if store else "" }}</b></div>
+    <div>
+      {% if user %}
+        {{ user.display_name }}
+        | <a href="/dashboard">🏠</a>
+        | <a href="/logout">Đăng xuất</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="container">
+    <div class="sidebar">
+      <a href="/dashboard">📊 Dashboard</a>
+      {% if can(user,"KHO") %}<a href="/kho">📦 Kho</a>{% endif %}
+      {% if can(user,"SẢNXUẤT") %}<a href="/congthuc">🧪 Công thức</a>
+      <a href="/sanxuat">🏭 Sản xuất</a>{% endif %}
+      {% if can(user,"DOANHTHU") %}<a href="/doanhthu">💵 Doanh thu</a>{% endif %}
+      {% if can(user,"DM") %}<a href="/dm/stores">🏬 Cửa hàng</a>
+      <a href="/dm/categories">🗂 Danh mục</a>
+      <a href="/dm/products">🥭 Sản phẩm</a>{% endif %}
+      {% if can(user,"USERS") %}<a href="/users">👤 Người dùng</a>{% endif %}
+      {% if can(user,"TSCD") %}<a href="/tssd">🏗 TSCD</a>{% endif %}
+      {% if can(user,"BAOCAO") %}<a href="/baocao/ton">📈 Báo cáo tồn</a>
+      <a href="/baocao/candoi">🧮 Cân đối</a>{% endif %}
+      <a href="/nhatky">🧾 Nhật ký</a>
+      <a href="/me/password">🔑 Đổi mật khẩu</a>
+    </div>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

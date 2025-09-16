@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>💵 Doanh thu</h2>
+  <form method="post" action="/doanhthu/add">
+    <input type="number" step="0.01" name="cash" placeholder="Tiền mặt">
+    <input type="number" step="0.01" name="bank" placeholder="Chuyển khoản">
+    <input type="text" name="note" placeholder="Ghi chú">
+    <button class="btn" type="submit">Ghi</button>
+  </form>
+</div>
+
+<div class="card">
+  <form method="get">
+    <input type="date" name="from" value="{{date_from}}">
+    <input type="date" name="to" value="{{date_to}}">
+    <button class="btn" type="submit">Lọc</button>
+    <a class="btn" href="/doanhthu/export?from={{date_from}}&to={{date_to}}">Xuất CSV</a>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Kết quả</h3>
+  <p>Tổng TM: {{total_cash}} | CK: {{total_bank}} | Tổng: {{total_all}}</p>
+  <table>
+    <tr><th>Ngày</th><th>Tiền mặt</th><th>Chuyển khoản</th><th>Ghi chú</th><th>Người tạo</th></tr>
+    {% for r in rows %}
+    <tr>
+      <td>{{r.date.strftime("%Y-%m-%d %H:%M")}}</td>
+      <td>{{r.cash}}</td>
+      <td>{{r.bank}}</td>
+      <td>{{r.note}}</td>
+      <td>{{r.created_by}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

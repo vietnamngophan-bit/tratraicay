@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Công thức</h2>
+<div class="card">
+  <h3>Tạo / sửa công thức</h3>
+  <form method="post" action="/congthuc/add" class="grid2" onsubmit="return pack()">
+    <div>
+      <label>Mã CT</label><input name="code" required>
+      <label>Tên CT</label><input name="name" required>
+      <label>Loại</label>
+      <select name="kind" id="kind">
+        <option value="CỐT">CỐT (thành phẩm)</option>
+        <option value="MUT_TRAI">MỨT từ trái</option>
+        <option value="MUT_COT">MỨT từ CỐT</option>
+      </select>
+      <label>SP đầu ra</label>
+      <select name="output_product_code">
+        {% for p in outputs %}<option value="{{ p.code }}">{{ p.name }}</option>{% endfor %}
+      </select>
+      <label>ĐVT TP</label><input name="output_uom" value="kg">
+      <label>Hệ số thu hồi</label><input type="number" step="0.001" name="yield_factor" value="1">
+      <label>Cốc/kg TP</label><input type="number" step="0.001" name="cups_per_kg" value="0">
+    </div>
+    <div>
+      <div id="fruits_block">
+        <label>Trái cây (giữ Ctrl/Shift để chọn nhiều)</label>
+        <select name="fruits_multi" multiple size="8">
+          {% for p in fruits %}<option value="{{p.code}}">{{p.name}} ({{p.code}})</option>{% endfor %}
+        </select>
+      </div>
+      <label>Phụ gia theo kg sau</label>
+      <div id="addons">
+        <div class="addon-row">
+          <select class="addon_code"><option value="">--Chọn--</option>{% for p in additives %}<option value="{{p.code}}">{{p.name}}</option>{% endfor %}</select>
+          <input class="addon_qty" type="number" step="0.001" placeholder="SL / 1kg sau">
+        </div>
+      </div>
+      <button type="button" class="btn secondary" onclick="addAddon()">+ Thêm phụ gia</button>
+      <label>Ghi chú</label><input name="note">
+    </div>
+    <input type="hidden" name="fruits_csv" id="fruits_csv">
+    <input type="hidden" name="additives_json" id="additives_json">
+    <div class="colspan2"><button class="btn">Lưu công thức</button></div>
+  </form>
+</div>
+<div class="card">
+  <h3>Danh sách công thức</h3>
+  <table>
+    <thead><tr><th>Mã</th><th>Tên</th><th>Loại</th><th>SP đầu ra</th><th>Note</th></tr></thead>
+    <tbody>
+      {% for f in formulas %}
+      <tr><td>{{ f.code }}</td><td>{{ f.name }}</td><td>{{ f.kind }}</td><td>{{ f.output_product_code }}</td><td>{{ f.note }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+function addAddon(){
+  const c = document.getElementById('addons');
+  c.insertAdjacentHTML('beforeend', c.children[0].outerHTML);
+}
+function pack(){
+  const fm = document.querySelector('select[name="fruits_multi"]');
+  const selected = fm ? Array.from(fm.selectedOptions).map(o=>o.value) : [];
+  document.getElementById('fruits_csv').value = selected.join(',');
+  const rows = Array.from(document.querySelectorAll('#addons .addon-row'));
+  const arr = rows.map(r=>{
+    const code = r.querySelector('.addon_code').value;
+    const qty = parseFloat(r.querySelector('.addon_qty').value || '0');
+    if(!code || !qty) return null;
+    return {code: code, qty_per_kg_sau: qty};
+  }).filter(Boolean);
+  document.getElementById('additives_json').value = JSON.stringify(arr);
+  return true;
+}
+</script>
+{% endblock %}

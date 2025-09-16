@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Kho – {{ store.name }}</h2>
+
+<div class="card">
+  <form method="get" action="/kho" class="grid3">
+    <div><label>Tìm sản phẩm</label><input name="q" value="{{q}}"></div>
+    <div><label>&nbsp;</label><button class="btn">Lọc</button></div>
+    <div><label>&nbsp;</label><span class="badge">Chọn sản phẩm để xem lịch sử</span></div>
+  </form>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <h3>Phiếu nhập</h3>
+    <form method="post" action="/kho/nhap">
+      <label>Sản phẩm</label>
+      <select name="product_code">
+        {% for p in prods %}<option value="{{ p.code }}">{{ p.name }} ({{ p.uom }})</option>{% endfor %}
+      </select>
+      <label>Số lượng</label><input type="number" step="0.001" name="qty" required>
+      <label>Giá nhập (VND/ĐVT)</label><input type="number" step="1" name="price" required>
+      <label>Ghi chú</label><input name="note">
+      <button class="btn">Ghi nhập</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Phiếu xuất</h3>
+    <form method="post" action="/kho/xuat">
+      <label>Sản phẩm</label>
+      <select name="product_code">
+        {% for p in prods %}<option value="{{ p.code }}">{{ p.name }} ({{ p.uom }})</option>{% endfor %}
+      </select>
+      <label>Số lượng</label><input type="number" step="0.001" name="qty" required>
+      <label>Lý do</label><input name="reason" value="Bán/AEON/kiểm kê/hủy">
+      <button class="btn">Ghi xuất</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Kiểm kê nhanh</h3>
+  <form method="post" action="/kho/kiemke" class="grid3">
+    <div><label>Sản phẩm</label>
+      <select name="product_code">
+        {% for p in prods %}<option value="{{ p.code }}">{{ p.name }} ({{ p.uom }})</option>{% endfor %}
+      </select></div>
+    <div><label>Tồn thực tế</label><input type="number" step="0.001" name="actual" required></div>
+    <div><label>&nbsp;</label><button class="btn">Đặt tồn = thực tế</button></div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Lịch sử xuất/nhập theo sản phẩm</h3>
+  <p>Nhấn vào mã sản phẩm để xem: 
+    {% for p in prods[:10] %}
+      <a href="/kho/lichsu/{{p.code}}">{{p.code}}</a>{% if not loop.last %} · {% endif %}
+    {% endfor %}
+  </p>
+</div>
+{% endblock %}

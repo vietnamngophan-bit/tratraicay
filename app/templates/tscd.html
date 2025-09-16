@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Tài sản cố định</h2>
+<div class="card">
+  <form method="post" action="/tssd/add" class="grid4">
+    <div><label>Mã</label><input name="code" required></div>
+    <div><label>Tên</label><input name="name" required></div>
+    <div><label>Nguyên giá (VND)</label><input name="cost" type="number" step="1" required></div>
+    <div><label>Tuổi thọ (tháng)</label><input name="life_months" type="number" value="60"></div>
+    <div><label>Ngày bắt đầu KH</label><input name="start_date" type="date" required></div>
+    <div class="colspan4"><button class="btn">Thêm TS</button></div>
+  </form>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Mã</th><th>Tên</th><th>Nguyên giá</th><th>Khấu hao/tháng</th><th>Đã KH</th><th>Giá trị còn lại</th></tr></thead>
+    {% for r in rows %}
+      <tr><td>{{r.code}}</td><td>{{r.name}}</td>
+      <td>{{"{:,.0f}".format(r.cost)}}</td>
+      <td>{{"{:,.0f}".format(r.dep_month)}}</td>
+      <td>{{"{:,.0f}".format(r.acc_dep)}}</td>
+      <td>{{"{:,.0f}".format(r.nbv)}}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

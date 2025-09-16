@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Cân đối kế toán (snapshot)</h2>
+<div class="card">
+  <table>
+    <thead><tr><th>Mục</th><th>Giá trị (VND)</th></tr></thead>
+    <tr><td>Tài sản lưu động: Tồn kho</td><td>{{ "{:,.0f}".format(stock_value) }}</td></tr>
+    <tr><td>Tài sản cố định (giá trị còn lại)</td><td>{{ "{:,.0f}".format(tscd_nbv) }}</td></tr>
+    <tr><td><b>Tổng tài sản</b></td><td><b>{{ "{:,.0f}".format(total_assets) }}</b></td></tr>
+    <tr><td>Vốn chủ sở hữu (proxy)</td><td>{{ "{:,.0f}".format(total_assets) }}</td></tr>
+  </table>
+  <p style="color:#94a3b8">*MVP: Cân đối = Tồn kho + TSCD (NBV). Có thể mở rộng (tiền mặt, công nợ...).</p>
+</div>
+{% endblock %}

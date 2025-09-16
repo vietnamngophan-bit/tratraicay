@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Người dùng & phân quyền</h2>
+<div class="card">
+  <form method="post" action="/users/add" class="grid4">
+    <div><label>Email</label><input name="email" required></div>
+    <div><label>Tên hiển thị</label><input name="display_name" required></div>
+    <div><label>Role</label><select name="role"><option>SuperAdmin</option><option>Admin</option><option>User</option></select></div>
+    <div><label>Cửa hàng mặc định</label>
+      <select name="store_code"><option value="">(None)</option>{% for s in stores %}<option value="{{s.code}}">{{s.name}}</option>{% endfor %}</select>
+    </div>
+    <div class="colspan4"><label>Quyền</label>
+      <div class="grid4">
+        {% for p in ['KHO','SẢNXUẤT','DOANHTHU','BAOCAO','USERS','DM','TSCD'] %}
+          <label><input type="checkbox" name="perms" value="{{p}}"> {{p}}</label>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="colspan4"><label>Mật khẩu khởi tạo</label><input name="password" value="123456"></div>
+    <div class="colspan4"><button class="btn">Thêm</button></div>
+  </form>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Email</th><th>Tên</th><th>Role</th><th>Store</th><th>Quyền</th></tr></thead>
+    {% for u in rows %}<tr><td>{{u.email}}</td><td>{{u.display_name}}</td><td>{{u.role}}</td><td>{{u.store_code or ''}}</td><td>{{u.permissions_csv}}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

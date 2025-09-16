@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Đăng nhập</title><link rel="stylesheet" href="/static/style.css"></head>
+<body class="centered"><div class="card"><h2>Đăng nhập</h2>{% if error %}<div class="error">{{ error }}</div>{% endif %}
+<form method="post" action="/login"><label>Email</label><input name="email" type="email" required><label>Mật khẩu</label><input name="password" type="password" required><button class="btn wfull">Vào hệ thống</button></form></div></body>
+</html>

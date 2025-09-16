@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Nhật ký sản phẩm {{product_code}} – {{ store.name }}</h2>
+<div class="card">
+<table>
+  <thead><tr><th>Thời gian</th><th>SL nhập</th><th>Giá nhập</th><th>SL xuất</th><th>Lý do</th><th>Tồn sau</th><th>Giá BQ</th><th>Giá trị</th></tr></thead>
+  <tbody>
+  {% for e in rows %}
+    <tr>
+      <td>{{ e.date.strftime("%Y-%m-%d %H:%M") }}</td>
+      <td>{{ e.qty_in }}</td>
+      <td>{{ e.price_in }}</td>
+      <td>{{ e.qty_out }}</td>
+      <td>{{ e.reason }}</td>
+      <td>{{ e.stock_after }}</td>
+      <td>{{ e.avg_price }}</td>
+      <td>{{ e.onhand_value }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
